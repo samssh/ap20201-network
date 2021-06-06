@@ -1,0 +1,5 @@
+package ap.mini_project.shared.response;
+
+public abstract class Response {
+    public abstract void visit(ResponseVisitor responseVisitor);
+}
