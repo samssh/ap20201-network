@@ -8,6 +8,7 @@ public interface ResponseVisitor {
     void showMessage(String message);
 
     default void empty() {
-
     }
+
+    void exit();
 }

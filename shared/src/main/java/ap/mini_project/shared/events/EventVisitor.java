@@ -9,5 +9,7 @@ public interface EventVisitor {
 
     Response getBoard();
 
+    Response exit();
+
     // ...
 }
