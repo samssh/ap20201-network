@@ -27,7 +27,6 @@ public class MainController implements ResponseVisitor {
     public void start() {
         loop.start();
         graphicalAgent.initialize();
-        graphicalAgent.gotoMainMenu();
     }
 
 
@@ -56,7 +55,7 @@ public class MainController implements ResponseVisitor {
 
     @Override
     public void showMessage(String s) {
-        JOptionPane.showMessageDialog(null, s);
         graphicalAgent.gotoMainMenu();
+        JOptionPane.showMessageDialog(graphicalAgent.getFrame(), s);
     }
 }

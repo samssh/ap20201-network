@@ -15,35 +15,37 @@ public class GraphicalAgent {
     private final EventListener listener;
     private final MyFrame frame;
     private final Map<PanelType, AbstractPanel> panels;
-    private Loop loop;
+    private final Loop loop;
+    private volatile PanelType currentPanel;
 
 
     public GraphicalAgent(EventListener listener) {
         this.listener = listener;
         this.frame = new MyFrame();
         this.panels = new EnumMap<>(PanelType.class);
-
+        loop = new Loop(2, this::updateBoard);
     }
 
     public void initialize() {
         frame.setVisible(true);
+        this.gotoMainMenu();
+        loop.start();
     }
 
     public void gotoMainMenu() {
+        this.currentPanel = PanelType.MAIN_MENU;
         MainMenuPanel panel = new MainMenuPanel(listener);
         frame.setContentPane(panel);
         panels.put(PanelType.MAIN_MENU, panel);
-        if (loop != null)
-            loop.stop();
     }
 
     public void gotoGamePanel(Board board) {
         if (frame.getContentPane() != panels.get(PanelType.GAME_PANEL)) {
+            this.currentPanel = PanelType.GAME_PANEL;
             GamePanel gamePanel = new GamePanel(listener, board);
             frame.setContentPane(gamePanel);
             panels.put(PanelType.GAME_PANEL, gamePanel);
-            loop = new Loop(2, this::updateBoard);
-            loop.start();
+
         } else {
             GamePanel gamePanel = (GamePanel) panels.get(PanelType.GAME_PANEL);
             gamePanel.setBoard(board);
@@ -51,6 +53,11 @@ public class GraphicalAgent {
     }
 
     private void updateBoard() {
-        listener.listen(new GetBoard());
+        if (this.currentPanel == PanelType.GAME_PANEL)
+            listener.listen(new GetBoard());
+    }
+
+    public MyFrame getFrame() {
+        return frame;
     }
 }
