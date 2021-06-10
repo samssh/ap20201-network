@@ -6,4 +6,8 @@ public interface ResponseVisitor {
     void visitBoard(Board board);
 
     void showMessage(String message);
+
+    default void empty() {
+
+    }
 }

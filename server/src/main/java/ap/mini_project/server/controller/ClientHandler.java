@@ -7,6 +7,7 @@ import ap.mini_project.shared.events.EventVisitor;
 import ap.mini_project.shared.events.StartGame;
 import ap.mini_project.shared.model.Board;
 import ap.mini_project.shared.response.BoardResponse;
+import ap.mini_project.shared.response.EmptyResponse;
 import ap.mini_project.shared.response.Response;
 import ap.mini_project.shared.response.ShowMessage;
 
@@ -21,6 +22,7 @@ public class ClientHandler extends Thread implements EventVisitor {
     public ClientHandler(ResponseSender sender, GameLobby gameLobby) throws IOException {
         this.sender = sender;
         this.gameLobby = gameLobby;
+        this.side = null;
     }
 
     public void run() {
@@ -44,6 +46,9 @@ public class ClientHandler extends Thread implements EventVisitor {
     @Override
     public Response getBoard() {
         Board board;
+        if (side == null) { // no game running
+            return new EmptyResponse();
+        }
         if (game == null) {
             board = new Board(7, 7);
             board.setMessage("waiting for another player");
@@ -53,9 +58,11 @@ public class ClientHandler extends Thread implements EventVisitor {
             else {
                 Game game = this.game;
                 this.game = null;
+                int sideIndex = side.getIndex();
+                this.side = null;
                 if (game.getResult() == 3)
                     return new ShowMessage("draw");
-                else if (game.getResult() == side.getIndex())
+                else if (game.getResult() == sideIndex)
                     return new ShowMessage("win");
                 else
                     return new ShowMessage("lose");

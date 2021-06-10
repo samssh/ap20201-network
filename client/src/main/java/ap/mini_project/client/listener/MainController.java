@@ -58,8 +58,5 @@ public class MainController implements ResponseVisitor {
     public void showMessage(String s) {
         JOptionPane.showMessageDialog(null, s);
         graphicalAgent.gotoMainMenu();
-        synchronized (events) {
-            events.clear();
-        }
     }
 }
