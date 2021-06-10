@@ -6,29 +6,33 @@ import ap.mini_project.server.model.Side;
 import ap.mini_project.shared.events.EventVisitor;
 import ap.mini_project.shared.events.StartGame;
 import ap.mini_project.shared.model.Board;
-import ap.mini_project.shared.response.BoardResponse;
-import ap.mini_project.shared.response.EmptyResponse;
-import ap.mini_project.shared.response.Response;
-import ap.mini_project.shared.response.ShowMessage;
+import ap.mini_project.shared.response.*;
 
 import java.io.IOException;
 
 public class ClientHandler extends Thread implements EventVisitor {
-    private final ResponseSender sender;
+    private final ResponseSender responseSender;
     private final GameLobby gameLobby;
     private Side side;
     private Game game;
+    private volatile boolean running;
 
-    public ClientHandler(ResponseSender sender, GameLobby gameLobby) throws IOException {
-        this.sender = sender;
+    public ClientHandler(ResponseSender responseSender, GameLobby gameLobby) throws IOException {
+        this.responseSender = responseSender;
         this.gameLobby = gameLobby;
-        this.side = null;
+    }
+
+    @Override
+    public synchronized void start() {
+        running = true;
+        super.start();
     }
 
     public void run() {
-        while (true) {
-            sender.sendResponse(sender.getEvent().visit(this));
+        while (running) {
+            responseSender.sendResponse(responseSender.getEvent().visit(this));
         }
+        responseSender.close();
     }
 
     @Override
@@ -69,6 +73,12 @@ public class ClientHandler extends Thread implements EventVisitor {
             }
         }
         return new BoardResponse(board);
+    }
+
+    @Override
+    public Response exit() {
+        running = false;
+        return new ExitResponse();
     }
 
     public void setSide(Side side) {

@@ -58,4 +58,10 @@ public class MainController implements ResponseVisitor {
         graphicalAgent.gotoMainMenu();
         JOptionPane.showMessageDialog(graphicalAgent.getFrame(), s);
     }
+
+    @Override
+    public void exit() {
+        eventSender.close();
+        System.exit(0);
+    }
 }
