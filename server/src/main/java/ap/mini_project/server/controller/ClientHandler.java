@@ -43,7 +43,8 @@ public class ClientHandler extends Thread implements EventVisitor {
 
     @Override
     public Response clickOnBoard(int x, int y) {
-        game.click(x, y, side);
+        if (game != null)
+            game.click(x, y, side);
         return getBoard();
     }
 

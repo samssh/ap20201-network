@@ -12,15 +12,17 @@ import java.awt.event.MouseEvent;
 public class GamePanel extends AbstractPanel {
     private final EventListener listener;
     private final BoardPanel boardPanel;
-    private final int cellH;
-    private final int cellW;
+    private int cellH;
+    private int cellW;
     private final JLabel label;
 
     public GamePanel(EventListener listener, Board board) {
         this.listener = listener;
-        this.cellH = (Constant.HEIGHT - 200) / board.getH();
-        this.cellW = (Constant.WIDTH - 200) / board.getW();
-        this.boardPanel = new BoardPanel(board, cellW, cellH);
+        this.label = new JLabel(board.getMessage(), SwingConstants.CENTER);
+        label.setBounds(150, 40, 500, 100);
+        this.add(label);
+        this.boardPanel = new BoardPanel();
+        this.setBoard(board);
         this.add(boardPanel);
         boardPanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -28,15 +30,13 @@ public class GamePanel extends AbstractPanel {
                 click(e.getX() / cellW, e.getY() / cellH);
             }
         });
-
-        label = new JLabel(board.getMessage());
-        label.setBounds(300, 40, 100, 100);
-        this.add(label);
     }
 
     public void setBoard(Board board) {
-        boardPanel.setBoard(board);
+        this.cellH = (Constant.HEIGHT - 200) / board.getH();
+        this.cellW = (Constant.WIDTH - 200) / board.getW();
         label.setText(board.getMessage());
+        boardPanel.setBoard(board, cellW, cellH);
     }
 
     private void click(int x, int y) {

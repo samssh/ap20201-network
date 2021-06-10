@@ -10,20 +10,18 @@ import java.awt.*;
 
 public class BoardPanel extends JPanel {
     private Board board;
-    private final int cellH;
-    private final int cellW;
+    private int cellH;
+    private int cellW;
 
-    public BoardPanel(Board board, int cellW, int cellH) {
+    public BoardPanel() {
         setLayout(null);
+    }
+
+    public synchronized void setBoard(Board board, int cellW, int cellH) {
         this.board = board;
         this.cellW = cellW;
         this.cellH = cellH;
         this.setBounds(100, 100, cellW * board.getW(), cellH * board.getH());
-    }
-
-
-    public synchronized void setBoard(Board board) {
-        this.board = board;
     }
 
     @Override
@@ -32,12 +30,16 @@ public class BoardPanel extends JPanel {
         for (int i = 0; i < board.getW(); i++) {
             for (int j = 0; j < board.getH(); j++) {
                 Cell tem = board.getCells()[i][j];
+                Color gColor = g.getColor();
                 g.setColor(new Color(tem.getR(), tem.getG(), tem.getB()));
                 g.fillRect(i * cellW, j * cellH, cellW, cellH);
+                g.setColor(Color.RED);
+                g.drawRect(i * cellW, j * cellH, cellW, cellH);
                 if (tem.getPieceName() != null) {
                     g.drawImage(ImageLoader.getInstance().getImage(tem.getPieceName()), i * cellW, j * cellH,
                             cellW, cellH, null);
                 }
+                g.setColor(gColor);
             }
         }
     }
