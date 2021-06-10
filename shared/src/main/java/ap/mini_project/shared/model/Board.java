@@ -1,5 +1,7 @@
 package ap.mini_project.shared.model;
 
+import java.awt.*;
+
 public class Board {
     private int h, w;
     private Cell[][] cells;
@@ -12,6 +14,11 @@ public class Board {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
                 cells[i][j] = new Cell();
+                if ((i + j) % 2 == 0) {
+                    cells[i][j].setColor(Color.BLACK);
+                } else {
+                    cells[i][j].setColor(Color.WHITE);
+                }
             }
         }
     }

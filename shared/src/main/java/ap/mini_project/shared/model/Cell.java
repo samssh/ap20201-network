@@ -1,5 +1,7 @@
 package ap.mini_project.shared.model;
 
+import java.awt.*;
+
 public class Cell {
     private int r, g, b;
     private String pieceName;
@@ -34,5 +36,11 @@ public class Cell {
 
     public void setPieceName(String pieceName) {
         this.pieceName = pieceName;
+    }
+
+    public void setColor(Color color) {
+        this.r = color.getRed();
+        this.g = color.getGreen();
+        this.b = color.getBlue();
     }
 }

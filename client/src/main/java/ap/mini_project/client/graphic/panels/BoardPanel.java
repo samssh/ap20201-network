@@ -33,11 +33,9 @@ public class BoardPanel extends JPanel {
                 Color gColor = g.getColor();
                 g.setColor(new Color(tem.getR(), tem.getG(), tem.getB()));
                 g.fillRect(i * cellW, j * cellH, cellW, cellH);
-                g.setColor(Color.RED);
-                g.drawRect(i * cellW, j * cellH, cellW, cellH);
                 if (tem.getPieceName() != null) {
                     g.drawImage(ImageLoader.getInstance().getImage(tem.getPieceName()), i * cellW, j * cellH,
-                            cellW, cellH, null);
+                            cellW, cellH, this);
                 }
                 g.setColor(gColor);
             }

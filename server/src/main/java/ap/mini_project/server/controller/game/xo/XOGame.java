@@ -5,7 +5,7 @@ import ap.mini_project.server.model.Side;
 import ap.mini_project.shared.model.Board;
 import ap.mini_project.shared.model.Cell;
 
-
+import java.awt.*;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -51,13 +51,12 @@ public class XOGame implements Game {
         Board board = new Board(height, width);
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Cell cell = new Cell();
+                Cell cell = board.getCells()[i][j];
                 if (gameState.getPiece(i, j) == Piece.O) {
-                    cell.setR(255);
+                    cell.setColor(Color.GREEN);
                 } else if (gameState.getPiece(i, j) == Piece.X) {
-                    cell.setB(255);
+                    cell.setColor(Color.YELLOW);
                 }
-                board.getCells()[i][j] = cell;
             }
         }
         if (gameState.getSideToTurn() == side) {
